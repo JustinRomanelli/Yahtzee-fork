@@ -22,10 +22,24 @@ public class ScoreButtonAction implements ActionListener {
     GameGraphics.incrementRound();
 
     ScoringMenuUI.buttonIDs[btnIndex] = "";
+
+    GameGraphics.p1.getScoresheet().setCategoryAsUsed(btnIndex);
   
     ScoringMenuUI.container.removeAll();
 
+    for (int i = 0; i < GameGraphics.allDice.length; i++) {
+      int val = GameGraphics.p1.getScoresheet().getDiceCup().rollDie();
+      
+      GameGraphics.p1.getScoresheet().getDiceCup().setHandVal(val, i);
+
+      GameGraphics.redrawDie("./imgs/die_" + val + ".png", 175 + (225 * i), 150, i);
+    }
+
+    GameGraphics.enabledScoring = GameGraphics.p1.getScoresheet().verify();
+
     rebuildContainer(ScoringMenuUI.container, ScoringMenuUI.labelIDs, ScoringMenuUI.buttonIDs);
+
+    ScoringMenuUI.enableScoringButtons(GameGraphics.enabledScoring);
 
     ScoringMenuUI.container.revalidate();
 
@@ -51,6 +65,9 @@ public class ScoreButtonAction implements ActionListener {
 
         label.setHorizontalAlignment(JLabel.CENTER);
 
+        // TODO: MAY HAVE TO CHANGE THIS LINE.
+        ScoringMenuUI.btnsScore[i] = null;
+
         container.add(label);
       }
       else {
@@ -61,6 +78,12 @@ public class ScoreButtonAction implements ActionListener {
         button.setHorizontalAlignment(JLabel.CENTER);
 
         button.addActionListener(new ScoreButtonAction(i));
+
+        ScoringMenuUI.btnsScore[i] = button;
+
+        // if (!GameGraphics.enabledScoring[i]) {
+        //   button.setEnabled(false);
+        // }
 
         container.add(button);
       }

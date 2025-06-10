@@ -10,8 +10,9 @@ public class Player {
     // More methods may be necessary for accessing and mutating the Scoresheet object for each player.
 
     public Player(String name, Scoresheet playerScoresheet) {
-        System.out.println("Enter Player Name: ");
-        this.name = input.nextLine();
+        // Commented out ONLY for testing.
+        // System.out.println("Enter Player Name: ");
+        // this.name = input.nextLine();
         this.playerScoresheet = playerScoresheet;
 
         input.close();
@@ -19,6 +20,10 @@ public class Player {
 
     public String getName() {
         return name;
+    }
+
+    public Scoresheet getScoresheet() {
+        return this.playerScoresheet;
     }
 
     // Returns the array of all scores.

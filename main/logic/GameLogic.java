@@ -30,8 +30,6 @@ public class GameLogic {
      * Will later be used for setting a die to be held.
      */
     public static void holdDie(Die die) {
-        System.out.println("Holding die...");
-        
         die.toggleHeld();
 
         // die.getIndex() is always the same as btn.getIndex().

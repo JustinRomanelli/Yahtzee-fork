@@ -6,11 +6,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import main.ui.GameGraphics;
+import main.ui.ScoringMenuUI;
 
 public class RollButtonAction implements ActionListener {
     public void actionPerformed(ActionEvent e) {
-        // For now, all this does is update the roll number.
-        // In the future, it will also have to actually roll the dice.
+        for (int i = 0; i < GameGraphics.allDice.length; i++) {
+            if (!GameGraphics.allDice[i].getIsHeld()) {
+                int val = GameGraphics.p1.getScoresheet().getDiceCup().rollDie();
+                // System.out.println("Die #" + i + " Rollled: Result = " + val);
+                GameGraphics.p1.getScoresheet().getDiceCup().setHandVal(val, i);
+
+                GameGraphics.redrawDie("./imgs/die_" + val + ".png", 175 + (225 * i), 150, i);
+            }
+        }
+
+        GameGraphics.enabledScoring = GameGraphics.p1.getScoresheet().verify();
+
+        ScoringMenuUI.enableScoringButtons(GameGraphics.enabledScoring);
 
         GameGraphics.incrementRolls();
     }

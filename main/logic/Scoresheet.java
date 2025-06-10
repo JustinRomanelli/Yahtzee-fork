@@ -9,7 +9,7 @@ public class Scoresheet {
     private DiceCup cup;
     private int[] hand;
     private int[] board;
-    private String[] categories = {"ones","twos","threes","fours","fives","sixes","upper section bonus","three of a kind","four of a kind","full house","small straight","large straight","chance","yahtzee"};
+    private String[] categories = {"ones","twos","threes","fours","fives","sixes","upper section bonus","three of a kind","four of a kind","full house","small straight","large straight","yahtzee","chance"};
     private boolean[] unusedCategories;
 
     public Scoresheet(DiceCup cup) {
@@ -19,10 +19,14 @@ public class Scoresheet {
         this.unusedCategories = makeCategoryList();
     }
 
+    public DiceCup getDiceCup() {
+        return this.cup;
+    }
+
     // NOTE: TEMPORARY FUNCTION FOR TESTING ONLY
-    // public void TEMP_SET_HAND_VAL(int val, int index) {
-    //     this.hand[index] = val;
-    // }
+    public void TEMP_SET_HAND_VAL(int val, int index) {
+        this.hand[index] = val;
+    }
 
     // Returns the current board.
     // Counts as the "scores"
@@ -33,6 +37,10 @@ public class Scoresheet {
     // Sets a score of the board to the given value.
     public void setScore(int val, int index) {
         this.board[index] = val;
+    }
+
+    public void setCategoryAsUsed(int index) {
+        this.unusedCategories[index] = false;
     }
 
     /* validCategory() checks to see if the category is valid
@@ -206,7 +214,11 @@ public class Scoresheet {
     // Verifies that a hand can be scored. Checks ALL categories at once.
     // Returns a boolean[] that contains whether or not each category can be scored.
     public boolean[] verify() {
-        
+
+        for (int i = 0; i < this.hand.length; i++) {
+            System.out.println("Hand " + (i + 1) + ": " + this.hand[i]);
+        }
+                
         int repeat = 0;
 
         int[] repeatArr = new int[6];
@@ -333,6 +345,10 @@ public class Scoresheet {
         // Chance (index 12): Always available, just sets to true (as long as it hasn't already been used).
         if (this.unusedCategories[12]) {
             canScoreList[12] = true;
+        }
+
+        for (int i = 0; i < canScoreList.length; i++) {
+            System.out.println(i + ": " + canScoreList[i]);
         }
 
         return canScoreList;

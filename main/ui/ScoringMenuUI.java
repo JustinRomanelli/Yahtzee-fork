@@ -57,6 +57,8 @@ public class ScoringMenuUI {
       jLabels[i].setHorizontalAlignment(JLabel.CENTER);
       btnsScore[i].setHorizontalAlignment(JLabel.CENTER);
 
+      btnsScore[i].setEnabled(false);
+
       // Uncomment the line below to disable the button when it is pressed.
       btnsScore[i].addActionListener(new ScoreButtonAction(i));
 
@@ -85,6 +87,14 @@ public class ScoringMenuUI {
     container.setBorder(b);
 
     GameGraphics.frame.add(container);
+  }
+
+  public static void enableScoringButtons(boolean[] buttonsToEnable) {
+    for (int i = 0; i < buttonsToEnable.length; i++) {
+      if (!ScoringMenuUI.buttonIDs[i].equals("")) {
+        btnsScore[i].setEnabled(buttonsToEnable[i]);
+      }
+    }
   }
 
 }

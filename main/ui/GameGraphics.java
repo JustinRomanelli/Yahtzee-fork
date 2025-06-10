@@ -6,7 +6,10 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 // Custom implementations for an image, button and scoring menu, respectively
+import main.logic.DiceCup;
 import main.logic.Die;
+import main.logic.Player;
+import main.logic.Scoresheet;
 import main.ui.ScoringMenuUI;
 import main.ui.event.HoldButtonAction;
 import main.ui.event.RollButtonAction;
@@ -21,6 +24,8 @@ public class GameGraphics {
     public static JFrame frame;
 
     public static Die[] allDice;
+
+    public static JLabel[] diceLabels;
   
     public static JButton[] buttonArray = new JButton[5];
 
@@ -36,14 +41,21 @@ public class GameGraphics {
 
     private static int numRounds = 1;
 
+    // Players
+    public static DiceCup d1 = new DiceCup();
+    public static Scoresheet s1 = new Scoresheet(d1);
+    public static Player p1 = new Player("P1", s1);
+
     // All of the image paths
-    // NOTE: Only DIE_ONE_PATH currently has an image!
     private static final String DIE_ONE_PATH = "./imgs/die_1.png";
-    // private static final String DIE_TWO_PATH = "./imgs/die_2.png";
-    // private static final String DIE_THREE_PATH = "./imgs/die_3.png";
-    // private static final String DIE_FOUR_PATH = "./imgs/die_4.png";
-    // private static final String DIE_FIVE_PATH = "./imgs/die_5.png";
-    // private static final String DIE_SIX_PATH = "./imgs/die_6.png";
+    private static final String DIE_TWO_PATH = "./imgs/die_2.png";
+    private static final String DIE_THREE_PATH = "./imgs/die_3.png";
+    private static final String DIE_FOUR_PATH = "./imgs/die_4.png";
+    private static final String DIE_FIVE_PATH = "./imgs/die_5.png";
+    private static final String DIE_SIX_PATH = "./imgs/die_6.png";
+
+    // Enabled Scoring Buttons
+    public static boolean[] enabledScoring = new boolean[13];
 
     /* 
      * Shows the UI.
@@ -63,6 +75,8 @@ public class GameGraphics {
         frame.setLayout(null);
 
         allDice = new Die[5];
+
+        diceLabels = new JLabel[5];
 
         // Draws the dice, with the formate IMG_FILE_PATH, x position, y position
         GameGraphics.drawDie(DIE_ONE_PATH, 175, 150, 0);
@@ -105,6 +119,8 @@ public class GameGraphics {
         allDice[btnIndex] = img;
 
         JLabel imgLabel = new JLabel(img);
+
+        diceLabels[btnIndex] = imgLabel;
 
         // Parameters for setBounds(): X-pos, Y-pos, Width, Height
         imgLabel.setBounds(x, y, 150, 150);
@@ -172,7 +188,6 @@ public class GameGraphics {
     }
 
     // Refreshes the round, so that it is incremented.
-    // NOTE: Later, these should make sure that these numbers do not exceed their limits (14 and 3, respectively)
     public static void incrementRound() {
         GameGraphics.numRounds++;
 
@@ -220,6 +235,15 @@ public class GameGraphics {
         GameGraphics.drawNumberOfRolls(50, 70);
 
         // IMPORTANT: Make sure to run this whenever updating a piece of the UI!!
+        frame.update(frame.getGraphics());
+    }
+
+    // Redraws a die, with a different image path --> different die displayed.
+    public static void redrawDie(String path, int x, int y, int dieIndex) {
+        frame.remove(diceLabels[dieIndex]);
+
+        drawDie(path, x, y, dieIndex);
+
         frame.update(frame.getGraphics());
     }
 }

@@ -19,6 +19,11 @@ public class DiceCup {
         return this.hand;
     }
 
+    public void setHandVal(int val, int index) {
+        this.hand[index] = val;
+        System.out.println("Setting " + val + " to index " + index);
+    }
+
     public int rollDie() {
         return (int) (Math.random() * 6) + 1;
     }
