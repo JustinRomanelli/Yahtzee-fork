@@ -9,7 +9,7 @@ public class Scoresheet {
     private DiceCup cup;
     private int[] hand;
     private int[] board;
-    private String[] categories = {"ones","twos","threes","fours","fives","sixes","upper section bonus","three of a kind","four of a kind","full house","small straight","large straight","yahtzee","chance"};
+    private String[] categories = {"ones","twos","threes","fours","fives","sixes","three of a kind","four of a kind","full house","small straight","large straight","yahtzee","chance"};
     private boolean[] unusedCategories;
 
     public Scoresheet(DiceCup cup) {
@@ -32,6 +32,16 @@ public class Scoresheet {
     // Counts as the "scores"
     public int[] getBoard() {
         return this.board;
+    }
+
+    public int getTotalScore() {
+        int total = 0;
+
+        for (int i = 0; i < this.board.length; i++) {
+            total += this.board[i];
+        }
+
+        return total;
     }
 
     // Sets a score of the board to the given value.
@@ -62,7 +72,7 @@ public class Scoresheet {
     public int[] makeBoard() {
         int[] board = new int[14];
         for (int i = 0; i < board.length; i++) {
-            board[i] = -1; // -1 means unused
+            board[i] = 0; // 0 means unused
         }
         return board;
     }
@@ -89,33 +99,37 @@ public class Scoresheet {
     }
 
     /* scoreHand() returns score of hand for given category
-     * @param: category
+     * @param: categoryIndex
      * @return: score
      */
-    public int scoreHand(String category) {
+    public int scoreHand(int categoryIndex) {
+        if (categoryIndex < 6) {
+            return scoreSimple(categoryIndex);
+        }
+        else {
+            return scoreComplex(categoryIndex);
+        }
+
         // There's a better way to do this, but this'll work for now.
         
-        boolean hasCategory = false;
-        int categoryIndex = -1;
-
-        for (int i = 0; i < categories.length; i++) {
-            if (categories[i].equals(category)) {
-                hasCategory = true;
-                categoryIndex = i;
-            }
-        }
-
-        if (hasCategory) {
-            if (categoryIndex < 6) {
-                return scoreSimple(categoryIndex);
-            }
-            else {
-                return scoreComplex(categoryIndex);
-            }
-        }
-
-        // 0 denotes a failure here.
-        return 0;
+        // boolean hasCategory = false;
+        // int categoryIndex = -1;
+        //
+        // for (int i = 0; i < categories.length; i++) {
+        //     if (categories[i].equals(category.toLowerCase())) {
+        //         hasCategory = true;
+        //         categoryIndex = i;
+        //     }
+        // }
+        //
+        // if (hasCategory) {
+        //     if (categoryIndex < 6) {
+        //         return scoreSimple(categoryIndex);
+        //     }
+        //     else {
+        //         return scoreComplex(categoryIndex);
+        //     }
+        // }
     }
 
     /* scoreSimple() scores categories with index less than 6

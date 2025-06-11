@@ -46,14 +46,6 @@ public class GameGraphics {
     public static Scoresheet s1 = new Scoresheet(d1);
     public static Player p1 = new Player("P1", s1);
 
-    // All of the image paths
-    private static final String DIE_ONE_PATH = "./imgs/die_1.png";
-    private static final String DIE_TWO_PATH = "./imgs/die_2.png";
-    private static final String DIE_THREE_PATH = "./imgs/die_3.png";
-    private static final String DIE_FOUR_PATH = "./imgs/die_4.png";
-    private static final String DIE_FIVE_PATH = "./imgs/die_5.png";
-    private static final String DIE_SIX_PATH = "./imgs/die_6.png";
-
     // Enabled Scoring Buttons
     public static boolean[] enabledScoring = new boolean[13];
 
@@ -78,12 +70,21 @@ public class GameGraphics {
 
         diceLabels = new JLabel[5];
 
+        for (int i = 0; i < GameGraphics.allDice.length; i++) {
+            int val = GameGraphics.p1.getScoresheet().getDiceCup().rollDie();
+            
+            GameGraphics.p1.getScoresheet().getDiceCup().setHandVal(val, i);
+
+            GameGraphics.drawDie("./imgs/die_" + val + ".png", 175 + (225 * i), 150, i);
+        }
+
+
         // Draws the dice, with the formate IMG_FILE_PATH, x position, y position
-        GameGraphics.drawDie(DIE_ONE_PATH, 175, 150, 0);
-        GameGraphics.drawDie(DIE_ONE_PATH, 400, 150, 1);
-        GameGraphics.drawDie(DIE_ONE_PATH, 625, 150, 2);
-        GameGraphics.drawDie(DIE_ONE_PATH, 850, 150, 3);
-        GameGraphics.drawDie(DIE_ONE_PATH, 1075, 150, 4);
+        // GameGraphics.drawDie(DIE_ONE_PATH, 175, 150, 0);
+        // GameGraphics.drawDie(DIE_ONE_PATH, 400, 150, 1);
+        // GameGraphics.drawDie(DIE_ONE_PATH, 625, 150, 2);
+        // GameGraphics.drawDie(DIE_ONE_PATH, 850, 150, 3);
+        // GameGraphics.drawDie(DIE_ONE_PATH, 1075, 150, 4);
 
         // Draws the hold buttons under the dice, with the x and y coordinates, then the button index.
         // The button index is currently used to identify which button is pressed, through a JButton[] array.
@@ -187,6 +188,13 @@ public class GameGraphics {
         
     }
 
+    public static void resetAllHoldButtons() {
+        for (JButton btn : buttonArray) {
+            btn.setBackground(null);
+            btn.setText("Hold");
+        }
+    }
+
     // Refreshes the round, so that it is incremented.
     public static void incrementRound() {
         GameGraphics.numRounds++;
@@ -213,6 +221,11 @@ public class GameGraphics {
         // Reset the roll count
         GameGraphics.numRolls = 1;
 
+        // Remove and recreate rollsLabel
+        frame.remove(GameGraphics.rollsLabel);
+
+        GameGraphics.drawNumberOfRolls(50, 70);
+
         // IMPORTANT: Make sure to run this whenever updating a piece of the UI!!
         frame.update(frame.getGraphics());
     }
@@ -224,7 +237,7 @@ public class GameGraphics {
         if (GameGraphics.numRolls > 2) {
             frame.remove(GameGraphics.rollButton);
 
-            GameGraphics.drawRollButton(650, 500, "No more rolls");
+            GameGraphics.drawRollButton(650, 500, "Roll Dice");
         
             GameGraphics.rollButton.setEnabled(false);
         }

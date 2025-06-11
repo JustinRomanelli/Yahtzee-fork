@@ -14,17 +14,38 @@ public class ScoreButtonAction implements ActionListener {
 
   private int btnIndex;
 
+  private int[] scores;
+
   public ScoreButtonAction(int index) {
     this.btnIndex = index;
+
+    this.scores = new int[13];
+
+    for (int i = 0; i < this.scores.length; i++) {
+      scores[i] = 0;
+    }
   }
 
   public void actionPerformed(ActionEvent e) {
+    // Increment the round number.
     GameGraphics.incrementRound();
 
-    ScoringMenuUI.buttonIDs[btnIndex] = "";
+    // Add to the total score display
+    int newScore = GameGraphics.p1.getScoresheet().scoreHand(btnIndex);
+
+    System.out.println("New Score: " + newScore);
+
+    this.scores[btnIndex] = newScore;
+
+    ScoringMenuUI.totalIntScore += newScore;
+
+    // Reset variables
+    ScoringMenuUI.buttonIDs[btnIndex] = String.valueOf(this.scores[btnIndex]);
 
     GameGraphics.p1.getScoresheet().setCategoryAsUsed(btnIndex);
-  
+ 
+    // Rebuild the scoring menu.
+    // Reroll all of the dice.
     ScoringMenuUI.container.removeAll();
 
     for (int i = 0; i < GameGraphics.allDice.length; i++) {
@@ -35,8 +56,14 @@ public class ScoreButtonAction implements ActionListener {
       GameGraphics.redrawDie("./imgs/die_" + val + ".png", 175 + (225 * i), 150, i);
     }
 
+    // Reset the scoring buttons' "enabled" status
     GameGraphics.enabledScoring = GameGraphics.p1.getScoresheet().verify();
 
+    // Reset the hold buttons back to default
+    GameGraphics.resetAllHoldButtons();
+
+    // Rebuild the scoring container
+    // Then, enable only the scoring buttons that can be properly scored
     rebuildContainer(ScoringMenuUI.container, ScoringMenuUI.labelIDs, ScoringMenuUI.buttonIDs);
 
     ScoringMenuUI.enableScoringButtons(GameGraphics.enabledScoring);
@@ -58,15 +85,12 @@ public class ScoreButtonAction implements ActionListener {
 
       container.add(label);
 
-      if (ScoringMenuUI.buttonIDs[i].equals("")) {
-        label = new JLabel("0");
+      if (!ScoringMenuUI.buttonIDs[i].equals("Score")) {
+        label = new JLabel(String.valueOf(GameGraphics.p1.getScoresheet().getBoard()[i]));
 
         label.setBorder(border);
 
         label.setHorizontalAlignment(JLabel.CENTER);
-
-        // TODO: MAY HAVE TO CHANGE THIS LINE.
-        ScoringMenuUI.btnsScore[i] = null;
 
         container.add(label);
       }
@@ -91,8 +115,7 @@ public class ScoreButtonAction implements ActionListener {
 
     JLabel scoreLabel = new JLabel("Total");
 
-    // Placeholder 0
-    ScoringMenuUI.totalScore = new JLabel("0");
+    ScoringMenuUI.totalScore = new JLabel(String.valueOf(GameGraphics.p1.getScoresheet().getTotalScore()));
 
     scoreLabel.setBorder(border);
     ScoringMenuUI.totalScore.setBorder(border);

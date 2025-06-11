@@ -19,6 +19,8 @@ public class ScoringMenuUI {
 
   public static JLabel totalScore;
 
+  public static int totalIntScore;
+
   public static String[] labelIDs = {
       "Ones", "Twos", "Threes", "Fours", "Fives", "Sixes",
       "Three of a Kind", "Four of a Kind", "Full House", "Small Straight",
@@ -57,7 +59,7 @@ public class ScoringMenuUI {
       jLabels[i].setHorizontalAlignment(JLabel.CENTER);
       btnsScore[i].setHorizontalAlignment(JLabel.CENTER);
 
-      btnsScore[i].setEnabled(false);
+      // btnsScore[i].setEnabled(false);
 
       // Uncomment the line below to disable the button when it is pressed.
       btnsScore[i].addActionListener(new ScoreButtonAction(i));
@@ -85,6 +87,10 @@ public class ScoringMenuUI {
     container.add(totalScore);
 
     container.setBorder(b);
+
+    GameGraphics.enabledScoring = GameGraphics.p1.getScoresheet().verify();
+
+    ScoringMenuUI.enableScoringButtons(GameGraphics.enabledScoring);
 
     GameGraphics.frame.add(container);
   }
