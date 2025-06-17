@@ -17,9 +17,12 @@ public class Main {
 
         Round round = new Round(scanner, p1);
 
-        // Loop while true, but break when p1 runs out of turns
-        // while (true) {
-            round.takeTurn();
-        // }
+        boolean shouldGameContinue = round.takeTurn();
+
+        while (shouldGameContinue) {
+            shouldGameContinue = round.takeTurn();
+        }
+
+        scanner.close();
     }
 }

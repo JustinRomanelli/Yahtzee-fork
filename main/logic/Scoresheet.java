@@ -49,19 +49,6 @@ public class Scoresheet {
         this.unusedCategories[index] = false;
     }
 
-    /* validCategory() checks to see if the category is valid
-     * @param: category
-     * @return: true if valid, false if invalid
-     */
-    // public boolean validCategory(String category) {
-    //     for (int i = 0; i < this.categories.length; i++) {
-    //         if (categories[i].compareTo(category) == 0) {
-    //             return unused(category);
-    //         }
-    //     }
-    //     return false;
-    // }
-
     /* makeBoard() creates a board with 14 categories
      * @return: array of integers representing the board
      */
@@ -229,13 +216,13 @@ public class Scoresheet {
                     }
                 }
                 
-                if (repeat >= 3 && this.unusedCategories[6]) {
+                if (categoryIndex == 6 && repeat >= 3 && this.unusedCategories[6]) {
                     return true;
                 }
-                if (repeat >= 4 && this.unusedCategories[7]) {
+                if (categoryIndex == 7 && repeat >= 4 && this.unusedCategories[7]) {
                     return true;
                 }
-                if (repeat == 5 && this.unusedCategories[11]) {
+                if (categoryIndex == 11 && repeat == 5 && this.unusedCategories[11]) {
                     return true;
                 }
             }
@@ -317,10 +304,10 @@ public class Scoresheet {
                 }
             }
 
-            if ((streakUp >= 4 || streakDown >= 4) && this.unusedCategories[9]) {
+            if (categoryIndex == 9 && (streakUp >= 4 || streakDown >= 4) && this.unusedCategories[9]) {
                 return true;
             }
-            if ((streakUp == 5 || streakDown == 5) && this.unusedCategories[10]) {
+            if (categoryIndex == 10 && (streakUp == 5 || streakDown == 5) && this.unusedCategories[10]) {
                 return true;
             }
         }

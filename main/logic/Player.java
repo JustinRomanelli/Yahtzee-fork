@@ -17,7 +17,6 @@ public class Player {
     this.name = "NULL";
     this.playerScoresheet = playerScoresheet;
 
-    input.close();
   }
 
   public String getName() {
