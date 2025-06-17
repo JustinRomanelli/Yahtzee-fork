@@ -333,4 +333,3 @@ public class Scoresheet {
         return false;
     }
 }
-
