@@ -91,19 +91,7 @@ public class Round {
             // Increases the roll count for a maximum of 3 rolls
             roll++;
         }
-
-
     }
-
-    // private String getInput() {
-    //     Scanner scanner = new Scanner(System.in);
-
-    //     System.out.println(scanner.hasNextLine());
-
-    //     String result = scanner.nextLine();
-
-    //     return result;
-    // }
 
     /******** Instructions ********
     First roll: all 5 dice
@@ -117,3 +105,4 @@ public class Round {
     After, must fill in a box on score card with a score or zero */
 
 }
+
