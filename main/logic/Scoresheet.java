@@ -7,14 +7,15 @@ import main.logic.Player;
 
 public class Scoresheet {
     private DiceCup cup;
-    private int[] hand;
+    private int[] hand_OLD;
     private int[] board;
-    private String[] categories = {"ones","twos","threes","fours","fives","sixes","three of a kind","four of a kind","full house","small straight","large straight","yahtzee","chance"};
+    public String[] categories = {"Ones", "Twos", "Threes", "Fours", "Fives", "Sixes",
+                                   "Three of a kind", "Four of a kind", "Full house", "Small straight", "Large straight", "Yahtzee", "Chance"};
     private boolean[] unusedCategories;
 
     public Scoresheet(DiceCup cup) {
         this.cup = cup;
-        this.hand = cup.getHand();
+        this.hand_OLD = cup.getHand();
         this.board = makeBoard();
         this.unusedCategories = makeCategoryList();
     }
@@ -97,12 +98,12 @@ public class Scoresheet {
      * @param: categoryIndex
      * @return: score
      */
-    public int scoreHand(int categoryIndex) {
+    public int scoreHand(int categoryIndex, int[] hand) {
         if (categoryIndex < 6) {
-            return scoreSimple(categoryIndex);
+            return scoreSimple(categoryIndex, hand);
         }
         else {
-            return scoreComplex(categoryIndex);
+            return scoreComplex(categoryIndex, hand);
         }
     }
 
@@ -111,7 +112,7 @@ public class Scoresheet {
      * @return: score
      */
 
-    public int scoreSimple(int categoryIndex) {
+    public int scoreSimple(int categoryIndex, int[] hand) {
         int total = 0;
     
         for (int value : hand) {
@@ -133,7 +134,7 @@ public class Scoresheet {
      * @return: score
      */
 
-    public int scoreComplex(int categoryIndex) {
+    public int scoreComplex(int categoryIndex, int[] hand) {
         
         int total = 0;
 
@@ -201,13 +202,11 @@ public class Scoresheet {
 
     // Verifies that a hand can be scored. Checks ALL categories at once.
     // Returns a boolean[] that contains whether or not each category can be scored.
-    public boolean verify(int categoryIndex) {
+    public boolean verify(int categoryIndex, int[] hand) {
 
         int repeat = 0;
 
         int[] repeatArr = new int[6];
-
-        // boolean[] canScoreList = new boolean[13];
 
         // Ones through Sixes (indicies 0-5)
 

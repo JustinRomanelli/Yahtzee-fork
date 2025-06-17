@@ -1,14 +1,25 @@
 package main;
 
+import java.util.Scanner;
+
 import main.logic.Scoresheet;
 import main.logic.DiceCup;
+import main.logic.Player;
+import main.logic.Round;
 
 import main.ui.GameGraphics;
 
-import java.lang.Math;
-
 public class Main {
     public static void main(String[] args) {
-       GameGraphics.show();
+        Player p1 = new Player("", new Scoresheet(new DiceCup()));
+
+        Scanner scanner = new Scanner(System.in);
+
+        Round round = new Round(scanner, p1);
+
+        // Loop while true, but break when p1 runs out of turns
+        // while (true) {
+            round.takeTurn();
+        // }
     }
 }

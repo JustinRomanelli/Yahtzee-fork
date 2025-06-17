@@ -31,7 +31,7 @@ public class ScoreButtonAction implements ActionListener {
     GameGraphics.incrementRound();
 
     // Add to the total score display
-    int newScore = GameGraphics.p1.getScoresheet().scoreHand(btnIndex);
+    int newScore = GameGraphics.p1.getScoresheet().scoreHand(btnIndex, GameGraphics.p1.getScoresheet().getDiceCup().getHand());
 
     System.out.println("New Score: " + newScore);
 
@@ -57,9 +57,9 @@ public class ScoreButtonAction implements ActionListener {
     }
 
     // Reset the scoring buttons' "enabled" status
-    for (int i = 0; i < GameGraphics.enabledScoring.length; i++) {
-      GameGraphics.enabledScoring[i] = GameGraphics.p1.getScoresheet().verify(i);
-    }
+    // for (int i = 0; i < GameGraphics.enabledScoring.length; i++) {
+    //   GameGraphics.enabledScoring[i] = GameGraphics.p1.getScoresheet().verify(i);
+    // }
 
     // Reset the hold buttons back to default
     GameGraphics.resetAllHoldButtons();

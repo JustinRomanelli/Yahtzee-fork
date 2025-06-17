@@ -90,9 +90,9 @@ public class ScoringMenuUI {
 
     // Initialize GameGraphics.enabledScoring (boolean[])
     
-    for (int i = 0; i < GameGraphics.enabledScoring.length; i++) {
-      GameGraphics.enabledScoring[i] = GameGraphics.p1.getScoresheet().verify(i);
-    }
+    // for (int i = 0; i < GameGraphics.enabledScoring.length; i++) {
+    //   GameGraphics.enabledScoring[i] = GameGraphics.p1.getScoresheet().verify(i);
+    // }
 
     ScoringMenuUI.enableScoringButtons(GameGraphics.enabledScoring);
 

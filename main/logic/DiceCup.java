@@ -19,41 +19,33 @@ public class DiceCup {
         return this.hand;
     }
 
+    public boolean[] getHeld() {
+        return this.hold;
+    }
+
     public void setHandVal(int val, int index) {
         this.hand[index] = val;
+    }
+
+    public void setHeld(boolean[] held) {
+        this.hold = held;
+    }
+
+    public void setHeld(int i, boolean value) {
+        this.hold[i] = value;
     }
 
     public int rollDie() {
         return (int) (Math.random() * 6) + 1;
     }
 
-    // public int[] rerollDice() {
-    //     for (int i = 0; i < hold.length; i++) {
-    //         if (!hold[i]) {
-    //             hand[i] = rollDie();
-    //         }
-    //
-    //         int index = 0;
-    //
-    //         for (int j = 0; j < hand.length; j++) {
-    //
-    //             if (hand[j] != 0) {
-    //                 index++;
-    //             }
-    //         }
-    //
-    //         int[] newArray = new int[index];
-    //
-    //         for (int k = 0; k < hand.length; k++) {
-    //             if (hand[k] != 0) {
-    //                 newArray[k] = hand[k];
-    //             }
-    //             else {
-    //                 if (k > 0) {
-    //                     k--;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+    public int[] rollAllDice() {
+        for (int i = 0; i < 5; i++) {
+            if (!this.hold[i]) {
+                this.hand[i] = this.rollDie();
+            }
+        }
+        
+        return this.hand;
+    }
 }
