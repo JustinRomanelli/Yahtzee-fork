@@ -57,7 +57,9 @@ public class ScoreButtonAction implements ActionListener {
     }
 
     // Reset the scoring buttons' "enabled" status
-    GameGraphics.enabledScoring = GameGraphics.p1.getScoresheet().verify();
+    for (int i = 0; i < GameGraphics.enabledScoring.length; i++) {
+      GameGraphics.enabledScoring[i] = GameGraphics.p1.getScoresheet().verify(i);
+    }
 
     // Reset the hold buttons back to default
     GameGraphics.resetAllHoldButtons();

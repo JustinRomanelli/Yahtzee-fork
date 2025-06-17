@@ -23,11 +23,6 @@ public class Scoresheet {
         return this.cup;
     }
 
-    // NOTE: TEMPORARY FUNCTION FOR TESTING ONLY
-    public void TEMP_SET_HAND_VAL(int val, int index) {
-        this.hand[index] = val;
-    }
-
     // Returns the current board.
     // Counts as the "scores"
     public int[] getBoard() {
@@ -91,7 +86,7 @@ public class Scoresheet {
     }
     
     /* unused() checks to see if the category is used before
-     * @param: category
+     * @param: categoryIndex
      * @return: true if unused, false if used
      */
     public boolean unused(int categoryIndex) {
@@ -109,27 +104,6 @@ public class Scoresheet {
         else {
             return scoreComplex(categoryIndex);
         }
-
-        // There's a better way to do this, but this'll work for now.
-        
-        // boolean hasCategory = false;
-        // int categoryIndex = -1;
-        //
-        // for (int i = 0; i < categories.length; i++) {
-        //     if (categories[i].equals(category.toLowerCase())) {
-        //         hasCategory = true;
-        //         categoryIndex = i;
-        //     }
-        // }
-        //
-        // if (hasCategory) {
-        //     if (categoryIndex < 6) {
-        //         return scoreSimple(categoryIndex);
-        //     }
-        //     else {
-        //         return scoreComplex(categoryIndex);
-        //     }
-        // }
     }
 
     /* scoreSimple() scores categories with index less than 6
@@ -227,51 +201,43 @@ public class Scoresheet {
 
     // Verifies that a hand can be scored. Checks ALL categories at once.
     // Returns a boolean[] that contains whether or not each category can be scored.
-    public boolean[] verify() {
+    public boolean verify(int categoryIndex) {
 
-        for (int i = 0; i < this.hand.length; i++) {
-            System.out.println("Hand " + (i + 1) + ": " + this.hand[i]);
-        }
-                
         int repeat = 0;
 
         int[] repeatArr = new int[6];
 
-        boolean[] canScoreList = new boolean[13];
-
-        // Set all values to false by default
-        
-        for (int i = 0; i < canScoreList.length; i++) {
-            canScoreList[i] = false;
-        }
+        // boolean[] canScoreList = new boolean[13];
 
         // Ones through Sixes (indicies 0-5)
 
-        for (int i = 1; i < 7; i++) {
+        if (categoryIndex >= 0 && categoryIndex <= 5) {
             for (int val : hand) {
-                if (val == i && this.unusedCategories[i - 1]) {
-                    canScoreList[i - 1] = true;
+                if (val == categoryIndex + 1 && this.unusedCategories[categoryIndex]) {
+                    return true;
                 }
             }
         }
 
         // 3 of a kind (index 6), 4 of a kind (index 7), Yahtzee (index 11)
 
-        for (int i = 1; i < 7; i++) {
-            repeat = 0;
-            for (int val : hand) {
-                if (val == i) {
-                    repeat++;
+        if (categoryIndex == 6 || categoryIndex == 7 || categoryIndex == 11) {
+            for (int i = 1; i < 7; i++) {
+                repeat = 0;
+                for (int val : hand) {
+                    if (val == i) {
+                        repeat++;
+                    }
                 }
-            }
-            
-            if (repeat >= 3 && this.unusedCategories[6]) {
-                canScoreList[6] = true;
+                
+                if (repeat >= 3 && this.unusedCategories[6]) {
+                    return true;
+                }
                 if (repeat >= 4 && this.unusedCategories[7]) {
-                    canScoreList[7] = true;
+                    return true;
                 }
                 if (repeat == 5 && this.unusedCategories[11]) {
-                    canScoreList[11] = true;
+                    return true;
                 }
             }
         }
@@ -280,142 +246,91 @@ public class Scoresheet {
         // NOTE: May not work entirely correctly.
         
         repeatArr = resetIntArr(repeatArr);
-
-        for (int i = 1; i < 7; i++) {
-            for (int j = 0; j < hand.length; j++) {
-                if (hand[j] == i) {
-                    repeatArr[i - 1]++;
+        
+        if (categoryIndex == 8) {
+            for (int i = 1; i < 7; i++) {
+                for (int j = 0; j < hand.length; j++) {
+                    if (hand[j] == i) {
+                        repeatArr[i - 1]++;
+                    }
                 }
             }
-        }
 
-        // TODO: Not confident on this logic, check this later.
-        boolean threeInARow = false;
-        boolean twoInARow = false;
+            // TODO: Not confident on this logic, check this later.
+            boolean threeInARow = false;
+            boolean twoInARow = false;
 
-        for (int val : repeatArr) {
-            if (val >= 3) {
-                threeInARow = true;
+            for (int val : repeatArr) {
+                if (val >= 3) {
+                    threeInARow = true;
+                }
+                else if (val == 2) {
+                    twoInARow = true;
+                }
             }
-            else if (val == 2) {
-                twoInARow = true;
-            }
-        }
 
-        if (threeInARow && twoInARow && this.unusedCategories[8]) {
-            canScoreList[8] = true;
+            if (threeInARow && twoInARow && this.unusedCategories[8]) {
+                return true;
+            }
         }
 
         // Small Straight (index 9), Large Straight (index 10)
 
-        int streakUp = 1; // Start at 1, since the first value counts toward the streak.
-        int streakDown = 1;
+        if (categoryIndex == 9 || categoryIndex == 10) {
+            int streakUp = 1; // Start at 1, since the first value counts toward the streak.
+            int streakDown = 1;
 
-        int lowest = 999; // Arbitrary large and small values, since they will be overridden in a moment anyways.
-        int highest = -1;
+            int lowest = 999; // Arbitrary large and small values, since they will be overridden in a moment anyways.
+            int highest = -1;
 
-        for (int i = 0; i < hand.length; i++) {
-            if (hand[i] > highest) {
-                highest = hand[i];
+            for (int i = 0; i < hand.length; i++) {
+                if (hand[i] > highest) {
+                    highest = hand[i];
+                }
+                if (hand[i] < lowest) {
+                    lowest = hand[i];
+                }
             }
-            if (hand[i] < lowest) {
-                lowest = hand[i];
+
+            int current = lowest;
+            int next = current + 1;
+
+            // Lowest --> Counting up
+            for (int i = 0; i < hand.length; i++) {
+                if (hand[i] == next) {
+                    current = next;
+                    next = current + 1;
+                    i = -1; // -1, since it will then increment back to 0.
+                    streakUp++;
+                }
             }
-        }
 
-        int current = lowest;
-        int next = current + 1;
+            current = highest;
+            next = current - 1;
 
-        // Lowest --> Counting up
-        for (int i = 0; i < hand.length; i++) {
-            if (hand[i] == next) {
-                current = next;
-                next = current + 1;
-                i = -1; // -1, since it will then increment back to 0.
-                streakUp++;
+            // Highest --> Counting down
+            for (int i = 0; i < hand.length; i++) {
+                if (hand[i] == next) {
+                    current = next;
+                    next = current - 1;
+                    i = -1; // -1, since it will then increment back to 0.
+                    streakDown++;
+                }
             }
-        }
 
-        current = highest;
-        next = current - 1;
-
-        // Highest --> Counting down
-        for (int i = 0; i < hand.length; i++) {
-            if (hand[i] == next) {
-                current = next;
-                next = current - 1;
-                i = -1; // -1, since it will then increment back to 0.
-                streakDown++;
+            if ((streakUp >= 4 || streakDown >= 4) && this.unusedCategories[9]) {
+                return true;
             }
-        }
-
-        if ((streakUp >= 4 || streakDown >= 4) && this.unusedCategories[9]) {
-            canScoreList[9] = true;
-        }
-        if ((streakUp == 5 || streakDown == 5) && this.unusedCategories[10]) {
-            canScoreList[10] = true;
+            if ((streakUp == 5 || streakDown == 5) && this.unusedCategories[10]) {
+                return true;
+            }
         }
 
         // Chance (index 12): Always available, just sets to true (as long as it hasn't already been used).
-        if (this.unusedCategories[12]) {
-            canScoreList[12] = true;
+        if (categoryIndex == 12 && this.unusedCategories[12]) {
+            return true;
         }
 
-        for (int i = 0; i < canScoreList.length; i++) {
-            System.out.println(i + ": " + canScoreList[i]);
-        }
-
-        return canScoreList;
-
-        /* OLD CODE
-         * OLD PARAM: int categoryIndex
-        if (categoryIndex == 6) {
-            for(int i = 0; i < 6; i++) {
-                int repeat = 0;
-                // NOTE: < or <=?
-                for(int j = 0; j < hand.length; j++) {
-                    if(hand[j] == i + 1) {
-                        repeat++;
-                    }
-                }
-                if (repeat >= 3) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }
-        if (categoryIndex == 7) {
-             for(int i = 0; i < 6; i++) {
-                int repeat = 0;
-                for(int j = 0; j < hand.length; j++) {
-                    if(hand[j] == i + 1) {
-                        repeat++;
-                    }
-                }
-                if (repeat >= 4) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }
-
-        if (categoryIndex == 8) {
-            for(int i = 0; i < 6; i++) {
-                int repeat = 0;
-                for(int j = 0; j < hand.length; j++) {
-                    if(hand[j] == i + 1) {
-                        repeat++;
-                        
-                    }
-                }
-                if (repeat >= 3) {
-                    
-
-                }
-
-            }
-        }*/
+        return false;
     }
 }

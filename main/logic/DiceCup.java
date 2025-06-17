@@ -21,7 +21,6 @@ public class DiceCup {
 
     public void setHandVal(int val, int index) {
         this.hand[index] = val;
-        System.out.println("Setting " + val + " to index " + index);
     }
 
     public int rollDie() {
